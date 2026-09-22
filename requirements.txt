@@ -1,0 +1,7 @@
+nibabel
+numpy
+scipy
+safetensors
+torch
+torchvision
+transformers
