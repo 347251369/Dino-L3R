@@ -1,0 +1,93 @@
+[project]
+name = "flare22-dino-l3r"
+python = "/pd/conda_envs/dino/bin/python"
+device = "cuda:0"
+fixed_test_previously_viewed = true
+start_stage = "gsp_dino"
+stop_after_stage = "ocre"
+
+[dataset]
+name = "flare22"
+train_images = "datasets/flare22/train/images"
+train_labels = "datasets/flare22/train/labels"
+test_images = "datasets/flare22/test/images"
+test_labels = "datasets/flare22/test/labels"
+split_manifest = "datasets/flare22/split_manifest.json"
+split_sha256 = "192ef2ece6903ba67e2f1a8ba440a3abf42982d57b3c0526a24b79638a0f7044"
+train_cases = 45
+test_cases = 5
+test_case_ids = ["0029", "0013", "0042", "0010", "0034"]
+
+[dependencies]
+dino_weights = "/pd/heyang/weights/model.safetensors"
+clip_model = "/pd/heyang/weights/clip-vit-base-patch32"
+dinov3_package = "third_party"
+
+[results]
+root = "results/flare22/dino_l3r"
+reproduction_root = "results/flare22/dino_l3r_reproduction"
+
+[gsp_dino]
+checkpoint = "results/flare22/dino_l3r/gsp_dino/checkpoints/gsp_final.pth"
+resume = "results/flare22/dino_l3r/gsp_dino/checkpoints/gsp_resume.pth"
+report = "results/flare22/dino_l3r/gsp_dino/reports/training.csv"
+train_predictions = "results/flare22/dino_l3r/gsp_dino/predictions/train"
+test_predictions = "results/flare22/dino_l3r/gsp_dino/predictions/test"
+epochs = 8
+samples_per_epoch = 21635
+batch_size = 4
+inference_batch_size = 4
+workers = 4
+lr_backbone = 5e-7
+lr_backbone_early = 1e-7
+lr_backbone_middle = 2e-7
+lr_backbone_late = 5e-7
+lr_head = 2e-5
+trainable_block_start = 6
+weight_decay = 1e-4
+seed = 42
+no_validation = true
+early_stopping = false
+augmentation_profile = "standard"
+balance_cap = 2.5
+class_weight_cap = 2.5
+background_weight = 0.25
+label_smoothing = 0.0
+context_mm = 5.0
+smooth_sigma = 1.0
+sampling_mode = "coverage_balanced"
+view_mode = "fixed_multiview"
+local_view_size = 320
+spatial_view_context = true
+loss_ce_weight = 0.40
+loss_dice_weight = 0.35
+loss_tversky_weight = 0.20
+loss_presence_weight = 0.05
+tversky_alpha = 0.30
+tversky_beta = 0.70
+depth_context_adapter = true
+presence_head = true
+
+[ocre]
+checkpoint = "results/flare22/dino_l3r/ocre/checkpoints/ocre_final.pth"
+checkpoint_sha256 = "e8d58eb01eecae721abe7d190eaf3c07fff877cf126d6406845fcea947a94ad1"
+cache = "results/flare22/dino_l3r/ocre/cache"
+train_predictions = "results/flare22/dino_l3r/ocre/predictions/train"
+test_predictions = "results/flare22/dino_l3r/ocre/predictions/test"
+require_train_predictions = false
+patch_size = [64, 144, 144]
+base_channels = 20
+max_patches = 32
+inference_batch_size = 4
+threshold = 0.5
+epochs = 24
+samples_per_epoch = 2200
+batch_size = 4
+workers = 8
+lr = 1.5e-4
+boundary_probability = 0.75
+prior_shift_probability = 0.65
+prior_shift_max_mm = 3.0
+save_every = 1
+amp = true
+seed = 542
